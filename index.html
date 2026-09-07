@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css"
+        integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <!-- header -->
+    <div class="container pt-5 mb-5">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="index.html" class="logo"><img src="./assets/img/netflixLogo.svg" alt="Logo"
+                        title="NetflixLogo"></a>
+            </div>
+            <div class="col-md-6 text-right align-self-center">
+                <button type="button" class="btn btn-sm net-pri-color" id="showMovieModalBtn">Add Movie</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movie Card -->
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="card movieCard">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4 class="m-0">Moviesfsffdfdfdef Name</h4>
+                        <h5 class="m-0"><span class="badge badge-success">4.4</span></h5>
+                    </div>
+                    <div class="card-body py-0">
+                        <figure class="m-0">
+                            <img src="./assets/img/sitaraman.jpg" alt="Sita Raman">
+
+                            <figcaption>
+                                <h4 class="m-0">Movie Name</h4>
+                                <p class="m-0">Lorem ipsum dolor sit amet consectetur adip
+                                    asperiores, quidem maiores quos numquam labore neque eius.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <button class="btn btn-sm net-sec-color">Edit</button>
+                        <button class="btn btn-sm net-pri-color">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- Movie Form -->
+    <div class="movieModal" id="movieModal">
+        <form id="form">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4>Add Movie</h4>
+                    <i role="button" class="fa-solid fa-xmark fa-2x" id="closeIcon"></i>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="movieName">Movie Name</label>
+                        <input type="text" class="form-control" id="movieName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="movieImg">Movie Image</label>
+                        <input type="text" class="form-control" id="movieImg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="movieDescription">Movie Description</label>
+                        <textarea type="text" rows="4" class="form-control" id="movieDescripion"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="movieRating">Movie Rating</label>
+                        <input type="number" class="form-control" id="movieRating" max="9" min="0" step="0.1">
+                    </div>
+
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <button type="submit" class="btn btn-sm net-sec-color" id="addMovieBtn">Add Movie</button>
+                    <button type="button" class="btn btn-sm net-pri-color" id="closeBtn">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="./assets/js/data.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>
