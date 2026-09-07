@@ -7,11 +7,17 @@ const closeBtn = document.getElementById("closeBtn");
 const closeIcon = document.getElementById("closeIcon");
 const movieContainer = document.getElementById("movieContainer");
 
+const form = document.getElementById("form");
+const movieName = document.getElementById("movieName");
+const movieImg = document.getElementById("movieImg");
+const movieDescripion = document.getElementById("movieDescripion");
+const movieRating = document.getElementById("movieRating");
+
 // Database
 
-let movieArray = movieArray1;
+let jsonArr = localStorage.getItem("movieArray");
 
-localStorage.setItem("movieArray", JSON.stringify(movieArray));
+let movieArray = jsonArr ? JSON.parse(jsonArr) : [];
 
 // functions
 
@@ -22,7 +28,7 @@ function saveData() {
 }
 
 // show hide movieModal
-function onShowMovieModalBtn() {
+function toggleMovieModalBtn() {
   backdrop.classList.toggle("active");
   movieModal.classList.toggle("active");
 }
@@ -45,8 +51,8 @@ function showOnUI(arr) {
 
   arr.forEach((ele) => {
     result += `
-      <div class="col-md-3 mb-3">
-                <div class="card movieCard" id="${ele.id}">
+      <div class="col-md-3 mb-3" id="${ele.id}">
+                <div class="card movieCard">
                     <div class="card-header d-flex justify-content-between">
                         <h4 class="m-0">${ele.title}</h4>
                         <h5 class="m-0"><span class="badge ${setRating(ele.rating)}">${ele.rating}</span></h5>
@@ -74,7 +80,70 @@ function showOnUI(arr) {
 
 showOnUI(movieArray);
 
-showMovieModalBtn.addEventListener("click", onShowMovieModalBtn);
-closeBtn.addEventListener("click", onShowMovieModalBtn);
-closeIcon.addEventListener("click", onShowMovieModalBtn);
-backdrop.addEventListener("click", onShowMovieModalBtn);
+// create
+
+function onMovieAdd(event) {
+  event.preventDefault();
+
+  if (
+    !movieName.value.trim() ||
+    !movieImg.value.trim() ||
+    !movieDescripion.value.trim() ||
+    !movieRating.value.trim()
+  )
+    return;
+
+  let newMovie = {
+    id: crypto.randomUUID(),
+    title: movieName.value.trim(),
+    img: movieImg.value.trim(),
+    description: movieDescripion.value.trim(),
+    rating: movieRating.value,
+  };
+
+  movieArray.unshift(newMovie);
+  saveData();
+  form.reset();
+  toggleMovieModalBtn();
+
+  // UI
+
+  let div = document.createElement("div");
+
+  div.id = newMovie.id;
+
+  div.className = `col-md-3 mb-3`;
+
+  div.innerHTML = `
+                 <div class="card movieCard">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4 class="m-0">${newMovie.title}</h4>
+                        <h5 class="m-0"><span class="badge ${setRating(newMovie.rating)}">${newMovie.rating}</span></h5>
+                    </div>
+                    <div class="card-body py-0">
+                        <figure class="m-0">
+                            <img src="${newMovie.img}" alt="${newMovie.title}">
+
+                            <figcaption>
+                                <h4 class="m-0">${newMovie.title}</h4>
+                                <p class="m-0">${newMovie.description}</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <button class="btn btn-sm net-sec-color">Edit</button>
+                        <button class="btn btn-sm net-pri-color">Remove</button>
+                    </div>
+                </div>
+  `;
+
+  movieContainer.prepend(div);
+}
+
+showMovieModalBtn.addEventListener("click", toggleMovieModalBtn);
+closeBtn.addEventListener("click", toggleMovieModalBtn);
+closeIcon.addEventListener("click", toggleMovieModalBtn);
+backdrop.addEventListener("click", toggleMovieModalBtn);
+backdrop.addEventListener("click", toggleMovieModalBtn);
+
+form.addEventListener("submit", onMovieAdd);
