@@ -12,6 +12,8 @@ const movieName = document.getElementById("movieName");
 const movieImg = document.getElementById("movieImg");
 const movieDescripion = document.getElementById("movieDescripion");
 const movieRating = document.getElementById("movieRating");
+const addMovieBtn = document.getElementById("addMovieBtn");
+const updateMovieBtn = document.getElementById("updateMovieBtn");
 
 // Database
 
@@ -68,7 +70,7 @@ function showOnUI(arr) {
                         </figure>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <button class="btn btn-sm net-sec-color">Edit</button>
+                        <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
                         <button class="btn btn-sm net-pri-color">Remove</button>
                     </div>
                 </div>
@@ -131,13 +133,32 @@ function onMovieAdd(event) {
                         </figure>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <button class="btn btn-sm net-sec-color">Edit</button>
+                        <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
                         <button class="btn btn-sm net-pri-color">Remove</button>
                     </div>
                 </div>
   `;
 
   movieContainer.prepend(div);
+}
+
+// edit
+
+function editMovie(ele) {
+  let editId = ele.closest(".col-md-3").id;
+  localStorage.setItem("editId", editId);
+  toggleMovieModalBtn();
+
+  let editObj = movieArray.find((ele) => ele.id === editId);
+  if (!editObj) return;
+
+  movieName.value = editObj.title;
+  movieImg.value = editObj.img;
+  movieDescripion.value = editObj.description;
+  movieRating.value = editObj.rating;
+
+  addMovieBtn.classList.add("d-none");
+  updateMovieBtn.classList.remove("d-none");
 }
 
 showMovieModalBtn.addEventListener("click", toggleMovieModalBtn);
