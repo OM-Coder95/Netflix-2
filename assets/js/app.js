@@ -35,6 +35,16 @@ function toggleMovieModal() {
   movieModal.classList.toggle("active");
 }
 
+// resetForm
+
+function resetForm() {
+  form.reset();
+  updateMovieBtn.classList.add("d-none");
+  addMovieBtn.classList.remove("d-none");
+
+  localStorage.removeItem("editId");
+}
+
 // setRating
 
 function setRating(rating) {
@@ -71,7 +81,7 @@ function showOnUI(arr) {
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
-                        <button class="btn btn-sm net-pri-color">Remove</button>
+                        <button onclick="removeMovie(this)" class="btn btn-sm net-pri-color">Remove</button>
                     </div>
                 </div>
             </div>
@@ -92,8 +102,15 @@ function onMovieAdd(event) {
     !movieImg.value.trim() ||
     !movieDescripion.value.trim() ||
     !movieRating.value.trim()
-  )
+  ) {
+    Swal.fire({
+      title: "Empty Fields!",
+      text: "Please fill all the fields.",
+      icon: "warning",
+      timer: 2000,
+    });
     return;
+  }
 
   let newMovie = {
     id: crypto.randomUUID(),
@@ -107,6 +124,12 @@ function onMovieAdd(event) {
   saveData();
   form.reset();
   toggleMovieModal();
+  Swal.fire({
+    title: "Movie Added!",
+    text: "Movie has been added successfully.",
+    icon: "success",
+    timer: 2000,
+  });
 
   // UI
 
@@ -134,7 +157,7 @@ function onMovieAdd(event) {
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
-                        <button class="btn btn-sm net-pri-color">Remove</button>
+                        <button onclick="removeMovie(this)" class="btn btn-sm net-pri-color">Remove</button>
                     </div>
                 </div>
   `;
@@ -187,8 +210,16 @@ function onUpdateClick() {
 
   movieArray[getIndex] = updatedObj;
   saveData();
+  updateMovieBtn.classList.add("d-none");
+  addMovieBtn.classList.remove("d-none");
   form.reset();
   toggleMovieModal();
+  Swal.fire({
+    title: "Movie Updated!",
+    text: "Movie has been updated successfully.",
+    icon: "success",
+    timer: 2000,
+  });
 
   document.getElementById(updateId).innerHTML = `
    <div class="card movieCard">
@@ -208,17 +239,51 @@ function onUpdateClick() {
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
-                        <button class="btn btn-sm net-pri-color">Remove</button>
+                        <button onclick="removeMovie(this)" class="btn btn-sm net-pri-color">Remove</button>
                     </div>
                 </div>
   `;
+}
+
+// remove
+
+function removeMovie(ele) {
+  let removeId = ele.closest(".col-md-3").id;
+
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to remove this movie?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Remove",
+    cancelButtonText: "Cancel",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let getIndex = movieArray.findIndex((ele) => ele.id === removeId);
+      if (getIndex === -1) return;
+
+      movieArray.splice(getIndex, 1);
+      saveData();
+
+      ele.closest(".col-md-3").remove();
+
+      Swal.fire({
+        title: "Removed!",
+        text: "Movie has been removed successfully.",
+        icon: "success",
+        timer: 2000,
+      });
+    }
+  });
 }
 
 showMovieModalBtn.addEventListener("click", toggleMovieModal);
 closeBtn.addEventListener("click", toggleMovieModal);
 closeIcon.addEventListener("click", toggleMovieModal);
 backdrop.addEventListener("click", toggleMovieModal);
-backdrop.addEventListener("click", toggleMovieModal);
 
 form.addEventListener("submit", onMovieAdd);
 updateMovieBtn.addEventListener("click", onUpdateClick);
+backdrop.addEventListener("click", resetForm);
+closeBtn.addEventListener("click", resetForm);
+closeIcon.addEventListener("click", resetForm);
