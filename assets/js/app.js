@@ -30,7 +30,7 @@ function saveData() {
 }
 
 // show hide movieModal
-function toggleMovieModalBtn() {
+function toggleMovieModal() {
   backdrop.classList.toggle("active");
   movieModal.classList.toggle("active");
 }
@@ -106,7 +106,7 @@ function onMovieAdd(event) {
   movieArray.unshift(newMovie);
   saveData();
   form.reset();
-  toggleMovieModalBtn();
+  toggleMovieModal();
 
   // UI
 
@@ -147,7 +147,7 @@ function onMovieAdd(event) {
 function editMovie(ele) {
   let editId = ele.closest(".col-md-3").id;
   localStorage.setItem("editId", editId);
-  toggleMovieModalBtn();
+  toggleMovieModal();
 
   let editObj = movieArray.find((ele) => ele.id === editId);
   if (!editObj) return;
@@ -161,10 +161,64 @@ function editMovie(ele) {
   updateMovieBtn.classList.remove("d-none");
 }
 
-showMovieModalBtn.addEventListener("click", toggleMovieModalBtn);
-closeBtn.addEventListener("click", toggleMovieModalBtn);
-closeIcon.addEventListener("click", toggleMovieModalBtn);
-backdrop.addEventListener("click", toggleMovieModalBtn);
-backdrop.addEventListener("click", toggleMovieModalBtn);
+// update
+
+function onUpdateClick() {
+  let updateId = localStorage.getItem("editId");
+
+  if (
+    !movieName.value.trim() ||
+    !movieImg.value.trim() ||
+    !movieDescripion.value.trim() ||
+    !movieRating.value.trim()
+  )
+    return;
+
+  let updatedObj = {
+    id: updateId,
+    title: movieName.value.trim(),
+    img: movieImg.value.trim(),
+    description: movieDescripion.value.trim(),
+    rating: movieRating.value,
+  };
+
+  let getIndex = movieArray.findIndex((ele) => ele.id === updateId);
+  if (getIndex === -1) return;
+
+  movieArray[getIndex] = updatedObj;
+  saveData();
+  form.reset();
+  toggleMovieModal();
+
+  document.getElementById(updateId).innerHTML = `
+   <div class="card movieCard">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4 class="m-0">${updatedObj.title}</h4>
+                        <h5 class="m-0"><span class="badge ${setRating(updatedObj.rating)}">${updatedObj.rating}</span></h5>
+                    </div>
+                    <div class="card-body py-0">
+                        <figure class="m-0">
+                            <img src="${updatedObj.img}" alt="${updatedObj.title}">
+
+                            <figcaption>
+                                <h4 class="m-0">${updatedObj.title}</h4>
+                                <p class="m-0">${updatedObj.description}</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <button onclick="editMovie(this)" class="btn btn-sm net-sec-color">Edit</button>
+                        <button class="btn btn-sm net-pri-color">Remove</button>
+                    </div>
+                </div>
+  `;
+}
+
+showMovieModalBtn.addEventListener("click", toggleMovieModal);
+closeBtn.addEventListener("click", toggleMovieModal);
+closeIcon.addEventListener("click", toggleMovieModal);
+backdrop.addEventListener("click", toggleMovieModal);
+backdrop.addEventListener("click", toggleMovieModal);
 
 form.addEventListener("submit", onMovieAdd);
+updateMovieBtn.addEventListener("click", onUpdateClick);
