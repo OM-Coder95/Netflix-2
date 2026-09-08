@@ -138,3 +138,19 @@ figcaption {
 .movieModal.active {
     transform: translateY(0%);
 }
+
+@media (max-width: 768px) {
+
+    .movieModal {
+        position: fixed;
+        top: 2vh;
+        left: 5%;
+        width: 90vh;
+        max-height: 95vh;
+    }
+
+    .movieModal .movieCardBody {
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+}
